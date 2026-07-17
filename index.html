@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Predictive Sales Forecast — Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#0B1714; --panel:#11201C; --panel2:#152922;
+    --ink:#E7F2EE; --sub:#7FA396;
+    --green:#33C481; --teal:#2A9D8F; --line:#1E332B;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:'Segoe UI',Roboto,Arial,sans-serif;}
+  .wrap{max-width:1240px;margin:0 auto;padding:36px 28px 60px;}
+  .eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--green);font-weight:700;}
+  h1{font-family:Georgia,'Times New Roman',serif;font-size:40px;margin:8px 0 4px;letter-spacing:-0.01em;}
+  .meta{color:var(--sub);font-size:14px;margin-bottom:28px;}
+  .meta b{color:var(--ink);}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px;}
+  .kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;}
+  .kpi .num{font-size:28px;font-weight:700;font-family:Georgia,serif;color:var(--green);}
+  .kpi .lbl{color:var(--sub);font-size:12.5px;margin-top:4px;}
+  .grid{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;margin-bottom:16px;}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px;}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:20px;}
+  .card h3{margin:0 0 4px;font-size:15px;font-weight:600;}
+  .card .sub{color:var(--sub);font-size:12px;margin-bottom:12px;}
+  .chart-box{position:relative;height:250px;}
+  .chart-box.tall{height:300px;}
+  .insight-list{margin:0;padding-left:18px;color:#C8DCD3;font-size:13.5px;line-height:1.7;}
+  .rec-card{background:linear-gradient(135deg,#152922,#11201C);border:1px solid var(--line);border-radius:10px;padding:22px;margin-top:6px;}
+  .rec-card h3{color:var(--green);font-size:13px;letter-spacing:.08em;text-transform:uppercase;margin:0 0 14px;}
+  .rec-card ol{margin:0;padding-left:20px;color:#DBEBE3;font-size:14px;line-height:1.9;}
+  .footer{margin-top:30px;color:var(--sub);font-size:12px;text-align:center;}
+  .badge{display:inline-block;background:var(--panel2);border:1px solid var(--line);border-radius:20px;padding:3px 11px;font-size:11px;color:var(--sub);margin-right:6px;}
+  @media(max-width:880px){.grid,.grid3,.kpis{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="eyebrow">Data Analytics Internship &middot; Project 04</div>
+  <h1>Predictive Sales Forecast</h1>
+  <div class="meta">Intern: <b>Haresh S</b> &nbsp;·&nbsp; Intern ID: <b>CITS7117</b> &nbsp;·&nbsp; CodTech IT Solutions &nbsp;·&nbsp; 48 months simulated retail sales (2022-2025)</div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="num">2.62%</div><div class="lbl">Forecast error (MAPE) — Linear Regression</div></div>
+    <div class="kpi"><div class="num">$106.4K</div><div class="lbl">Forecasted sales, June 2026</div></div>
+    <div class="kpi"><div class="num">+28%</div><div class="lbl">December seasonal uplift vs trend</div></div>
+    <div class="kpi"><div class="num">-12%</div><div class="lbl">February seasonal dip vs trend</div></div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Historical Sales & 6-Month Forecast</h3>
+      <div class="sub">Jan 2022 – Jun 2026, with 90% confidence interval</div>
+      <div class="chart-box tall"><canvas id="forecastChart"></canvas></div>
+    </div>
+    <div class="card">
+      <h3>Model Accuracy</h3>
+      <div class="sub">Lower MAPE = better forecast</div>
+      <div class="chart-box"><canvas id="modelChart"></canvas></div>
+      <div class="sub" style="margin-top:16px;">Linear Regression wins because it directly captures the promotional campaign signal, which pure time-series smoothing can't see.</div>
+    </div>
+  </div>
+
+  <div class="grid3">
+    <div class="card">
+      <h3>Average Sales by Month</h3>
+      <div class="sub">Clear seasonality pattern</div>
+      <div class="chart-box"><canvas id="seasonalChart"></canvas></div>
+    </div>
+    <div class="card">
+      <h3>Next 6-Month Forecast</h3>
+      <div class="sub">Jan – Jun 2026</div>
+      <div class="chart-box"><canvas id="futureChart"></canvas></div>
+    </div>
+    <div class="card">
+      <h3>Key Insights</h3>
+      <ul class="insight-list" style="font-size:12.5px;">
+        <li>February is consistently the weakest month; Nov-Dec the strongest — classic holiday retail pattern.</li>
+        <li>Promotional months show an <b>8-18%</b> sales lift over baseline.</li>
+        <li>Sales projected to grow from <b>$95.2K</b> (Jan '26) to <b>$106.4K</b> (Jun '26).</li>
+        <li><b>2.62% MAPE</b> is strong accuracy for retail forecasting (under 10% is considered good).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="rec-card">
+    <h3>Business Recommendations</h3>
+    <ol>
+      <li>Plan inventory and staffing around confirmed seasonality — especially the Nov-Dec peak and February dip.</li>
+      <li>Formalize a quarterly promotional calendar rather than ad hoc campaigns, since promotions show a measurable, repeatable lift.</li>
+      <li>Use the confidence interval — not just the point forecast — for budget planning: lower bound for commitments, upper bound for stretch targets.</li>
+      <li>Feed planned marketing campaigns (from the Attribution project) into future forecasts to improve accuracy further.</li>
+      <li>Re-run the forecast monthly on a rolling basis to catch trend shifts faster than a static one-time forecast.</li>
+    </ol>
+  </div>
+
+  <div class="footer">
+    <span class="badge">Python</span><span class="badge">statsmodels</span><span class="badge">scikit-learn</span><span class="badge">Time-Series Forecasting</span>
+    &nbsp; — CodTech IT Solutions Data Analytics Internship, 4 Weeks
+  </div>
+</div>
+
+<script>
+Chart.defaults.color = '#7FA396';
+Chart.defaults.font.family = "'Segoe UI',Roboto,Arial,sans-serif";
+Chart.defaults.font.size = 11;
+const gridColor = '#1E332B';
+
+const hist = [46899.61,48946.71,53986.59,52274.60,55140.32,60130.61,60769.10,56786.65,61308.21,66202.13,80903.66,73175.79,
+60025.19,66674.86,63189.96,72966.90,66113.36,67361.49,68445.03,72410.87,86755.72,78994.24,96891.15,94136.50,
+75805.67,64840.06,71377.68,75681.56,85288.01,83579.86,80007.80,78973.52,81881.77,90977.20,102007.83,102072.98,
+95811.60,73228.57,89585.10,87888.38,105920.59,91189.92,91879.96,93175.26,100625.32,104500.63,110091.77,122295.02];
+const histLabels = [];
+let sd = new Date(2022,0,1);
+for(let i=0;i<48;i++){ histLabels.push(sd.toLocaleDateString('en-US',{month:'short',year:'2-digit'})); sd.setMonth(sd.getMonth()+1); }
+
+const futLabels = ['Jan 26','Feb 26','Mar 26','Apr 26','May 26','Jun 26'];
+const futForecast = [95197.4,88984.5,100348.2,100390.5,106303.2,106378.8];
+const futUpper = [99570.5,93357.5,104721.3,104763.5,110676.3,110751.9];
+const futLower = [90824.4,84611.4,95975.2,96017.5,101930.2,102005.8];
+
+const allLabels = histLabels.concat(futLabels);
+const histData = hist.concat(Array(6).fill(null));
+const forecastData = Array(47).fill(null).concat([hist[47]]).concat(futForecast);
+const upperData = Array(48).fill(null).concat(futUpper);
+const lowerData = Array(48).fill(null).concat(futLower);
+
+new Chart(document.getElementById('forecastChart'), {
+  type:'line',
+  data:{
+    labels: allLabels,
+    datasets:[
+      {label:'Upper CI', data:upperData, borderColor:'transparent', backgroundColor:'rgba(51,196,129,0.12)', fill:'+1', pointRadius:0, order:3},
+      {label:'Lower CI', data:lowerData, borderColor:'transparent', backgroundColor:'rgba(51,196,129,0.12)', fill:false, pointRadius:0, order:3},
+      {label:'Historical', data:histData, borderColor:'#7FA396', borderWidth:2, pointRadius:0, order:1},
+      {label:'Forecast', data:forecastData, borderColor:'#33C481', borderWidth:2.5, borderDash:[5,3], pointRadius:2, order:2}
+    ]
+  },
+  options:{responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{boxWidth:10,filter:l=>l.text!=='Upper CI'&&l.text!=='Lower CI'}}},
+    scales:{x:{grid:{display:false}, ticks:{maxTicksLimit:12,font:{size:9}}}, y:{grid:{color:gridColor}, ticks:{callback:v=>'$'+(v/1000)+'K'}}}}
+});
+
+new Chart(document.getElementById('modelChart'), {
+  type:'bar',
+  data:{
+    labels:['Linear Regression','Holt-Winters'],
+    datasets:[{data:[2.62,4.49], backgroundColor:['#33C481','#2A9D8F']}]
+  },
+  options:{indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
+    scales:{x:{grid:{color:gridColor}, ticks:{callback:v=>v+'%'}}, y:{grid:{display:false}}}}
+});
+
+new Chart(document.getElementById('seasonalChart'), {
+  type:'bar',
+  data:{
+    labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+    datasets:[{data:[69636,63423,69535,72203,78116,75565,75275,75337,82643,85169,97474,97920], backgroundColor:'#2A9D8F'}]
+  },
+  options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
+    scales:{x:{grid:{display:false},ticks:{font:{size:9}}}, y:{grid:{color:gridColor}, ticks:{callback:v=>'$'+(v/1000)+'K'}}}}
+});
+
+new Chart(document.getElementById('futureChart'), {
+  type:'line',
+  data:{
+    labels: futLabels,
+    datasets:[{label:'Forecast', data:futForecast, borderColor:'#33C481', backgroundColor:'rgba(51,196,129,0.15)', fill:true, tension:0.3, pointRadius:4}]
+  },
+  options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
+    scales:{x:{grid:{display:false}}, y:{grid:{color:gridColor}, ticks:{callback:v=>'$'+(v/1000)+'K'}}}}
+});
+</script>
+</body>
+</html>
