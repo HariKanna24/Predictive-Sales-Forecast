@@ -74,5 +74,4 @@ predictive-sales-forecast/
 
 Python (pandas, numpy, scikit-learn, statsmodels, matplotlib, seaborn)
 
-[Uploading index.html…]
-
+file:///C:/Users/HARESH/AppData/Local/Temp/cddf50ec-74ee-42dd-a383-19b24316891f_Predictive-Sales-Forecast.zip.91f/forecast_project/dashboard/index.html
