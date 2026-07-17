@@ -1,4 +1,4 @@
-[index.html](https://github.com/user-attachments/files/30109250/index.html)# Predictive Sales Forecast
+# Predictive Sales Forecast
 
 **Intern:** Haresh S
 **Intern ID:** CITS7117
@@ -73,5 +73,3 @@ predictive-sales-forecast/
 ## Tools Used
 
 Python (pandas, numpy, scikit-learn, statsmodels, matplotlib, seaborn)
-
-file:///C:/Users/HARESH/AppData/Local/Temp/cddf50ec-74ee-42dd-a383-19b24316891f_Predictive-Sales-Forecast.zip.91f/forecast_project/dashboard/index.html
