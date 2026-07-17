@@ -73,6 +73,3 @@ predictive-sales-forecast/
 ## Tools Used
 
 Python (pandas, numpy, scikit-learn, statsmodels, matplotlib, seaborn)
-
-## No. of Weeks
-4 Weeks
